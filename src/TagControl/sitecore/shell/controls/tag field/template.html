@@ -1,0 +1,57 @@
+<html>
+<head>
+    <link href="/sitecore/shell/controls/tag field/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link href="/sitecore/shell/controls/tag field/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+    <script src="/sitecore/shell/controls/tag field/js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/sitecore/shell/controls/tag field/js/taghelper.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/sitecore/shell/controls/tag field/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        ul.tagit {
+            background-color: white !important;
+        }
+
+        .ui-autocomplete-input {
+            min-height: 0px !important;
+        }
+    </style>
+    <script type="text/javascript">
+        //$.noConflict();
+        var selectedTags = [];
+        jQuery.noConflict();
+        (function ($) {
+            $(function () {
+                // More code using $ as alias to jQuery
+                $("#myTags").tagit({
+                    autocomplete: { source: ($tags$), delay: 0, minLength: 2, showAutocompleteOnFocus: true,autoFocus: true }
+                });
+                $("#myTags").tagit({
+                    afterTagRemoved: function (event, ui) {
+                        // do something special
+                        selectedTags = JSON.parse($("#hdnJsonObject").val());
+                        removeByAttr(selectedTags, "label", ui.tagLabel);
+                        $("#hdnJsonObject").val(JSON.stringify(selectedTags));
+                    },
+                    afterTagAdded: function (event, ui) {
+                        // tag not exist, add it to the selectedTags array
+                        selectedTags = JSON.parse($("#hdnJsonObject").val());
+                        addTagObject(selectedTags,ui.tag.data("id"), ui.tagLabel);
+                        $("#hdnJsonObject").val(JSON.stringify(selectedTags));
+                    }
+
+                });
+            });
+        })(jQuery);
+
+    </script>
+</head>
+<body>
+
+    <ul id="myTags">
+        <!-- Existing list items will be pre-added to the tags -->
+		<!--<li data-id="1">Tag1</li>-->
+        ($avalilableTags$)
+    </ul>
+    
+    <input type="hidden" id="hdnJsonObject" value="($jsonObject$)" />
+</body>
+</html>
