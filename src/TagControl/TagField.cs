@@ -8,6 +8,7 @@ using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.SecurityModel;
 using Sitecore.Shell.Applications.ContentEditor;
+using Sitecore.Web.UI.HtmlControls;
 using Sitecore.Web.UI.Sheer;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,21 @@ using TagControl.sitecore;
 namespace TagControl
 {
     public class TagField : Sitecore.Web.UI.HtmlControls.Control
-
     {
+       
+        #region Private Properties
 
-        private const string FOLDER_NAME = "sitecore\\shell\\Controls\\tag field";
-
-        public string Source
+        private string HTMLTemplatePath
         {
+            get
+            {
+                return Settings.GetSetting("TagField.HTMLTemplatePath");
+            }
+        }
+
+        private string Source
+        {
+
             get { return StringUtil.GetString(ViewState["Source"]); }
             set
             {
@@ -39,7 +48,7 @@ namespace TagControl
             }
         }
 
-        public string InputId
+        private string InputId
         {
             get { return GetID("input"); }
         }
@@ -74,7 +83,6 @@ namespace TagControl
         }
 
         private ID TagFolderId
-
         {
             get
             {
@@ -92,47 +100,60 @@ namespace TagControl
             }
         }
 
+        #endregion
+
+        #region Events
+
         protected override void OnLoad(EventArgs e)
         {
             var literalTags = new System.Web.UI.WebControls.Literal();
             if (!Sitecore.Context.ClientPage.IsEvent)
             {
 
-                BuildTags(literalTags);
+                BuildTagsControl(literalTags);
                 Controls.Add(literalTags);
             }
             else
             {
-
-                var tagEntities = new List<TagEntity>();
-                var jsonSerialiser = new JavaScriptSerializer();
-                var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form["hdnJsonObject"]);
-                var createItemTasks = new List<Task>();
-                foreach (var tag in tagList)
+                /*This line to make sure to add new tag item only when the triggered event is save, this event it will be rasied by one of the following actions:
+                 1) Click save from ribbon.
+                 2) Shortcut cltr + save.
+                 3) When you change the field and you go to other item without click save aciton, the dialog of "save itme changes" will appear 
+                    and ask you if you want to save the changes, then you click "Yes"*/
+                var eventType = Sitecore.Context.ClientPage.ClientRequest.Parameters;
+                if (eventType.Equals("contenteditor:save") || eventType.Equals("item:save()"))
                 {
-
-                    if (tag.id == "0")
+                    var tagEntities = new List<TagEntity>();
+                    var jsonSerialiser = new JavaScriptSerializer();
+                    var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form["hdnJsonObject"]);
+                    var createItemTasks = new List<Task>();
+                    foreach (var tag in tagList)
                     {
-                        var task = Task.Run(() => CreateItem(tag.label));
-                        task.Wait(1);
-                        var item = task.Result;
-                        tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
+                        if (tag.id == "0")
+                        {
+                            /* I created another task to create sitecore item, the reason behind that is when you create an item here in this place sitecore will take
+                            you to the newly created item in the tree which is this is the default behavior for sitecore, but for this control if new tag added not already
+                            exists in the tag repositroy, then i want to create that tage in the reop and get the newly tag item id, and save it in raw value of the field.*/
+                            var task = Task.Run(() => CreateItem(tag.label));
+                            task.Wait(1);
+                            var item = task.Result;
+                            tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
+                        }
                     }
+                    var value = jsonSerialiser.Serialize(tagList) ?? "";
+                    Sitecore.Context.ClientPage.Modified = (Value != value);
+                    if (value != null && value != Value)
+                        Value = value;
                 }
-                var value = jsonSerialiser.Serialize(tagList) ?? "";
-                Sitecore.Context.ClientPage.Modified = Value != value;
-                if (value != null && value != Value)
-                    Value = value;
             }
             base.OnLoad(e);
         }
 
-        public override void HandleMessage(Message message)
-        {
-        }
+        #endregion
 
         #region Private Methods
-        void BuildTags(System.Web.UI.WebControls.Literal literalTags)
+
+        void BuildTagsControl(System.Web.UI.WebControls.Literal literalTags)
         {
             string tagEntitiesJson = string.Empty;
             var tagEntities = new List<TagEntity>();
@@ -142,7 +163,7 @@ namespace TagControl
             var tags = TagsSearch();
             var jsonSerialiser = new JavaScriptSerializer();
             var tagsJson = jsonSerialiser.Serialize(tags);
-            var path = Path.Combine(basePath, FOLDER_NAME, "template.html");
+            var path = Path.Combine(basePath, HTMLTemplatePath);
             var html = System.IO.File.ReadAllText(path);
 
             html = html.Replace("($tags$)", tagsJson);
@@ -169,17 +190,20 @@ namespace TagControl
                         }
                     }
                 }
+
                 tagEntitiesJson = jsonSerialiser.Serialize(tagEntities);
             }
             html = html.Replace("($avalilableTags$)", list.ToString());
             html = html.Replace("($jsonObject$)", string.IsNullOrEmpty(tagEntitiesJson) ? "[]" : HttpUtility.HtmlEncode(tagEntitiesJson));
             literalTags.Text = html;
         }
+
         private Item[] GetTags()
         {
             Item[] tags = Client.ContentDatabase.SelectItems(Source);
             return tags;
         }
+
         private List<TagEntity> TagsSearch()
         {
             var items = new List<TagEntity>();
@@ -213,7 +237,6 @@ namespace TagControl
 
         public Item CreateItem(string itemName)
         {
-
             //First get the parent item from the master database
             Database contentDatabase = Factory.GetDatabase("master");
             Item parentItem = contentDatabase.GetItem(Source);
@@ -221,10 +244,7 @@ namespace TagControl
             TemplateItem template = contentDatabase.GetTemplate(TagTemplateId);
             //Now we can add the new item as a child to the parent
             return parentItem.Add(itemName, template);
-
-
         }
-
 
         #endregion
     }
