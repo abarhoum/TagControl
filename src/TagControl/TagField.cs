@@ -134,7 +134,8 @@ namespace TagControl
                             /* I created another task to create sitecore item, the reason behind that is when you create an item here in this place sitecore will take
                             you to the newly created item in the tree which is this is the default behavior for sitecore, but for this control if new tag added not already
                             exists in the tag repositroy, then i want to create that tage in the reop and get the newly tag item id, and save it in raw value of the field.*/
-                            var task = Task.Run(() => CreateItem(tag.label));
+                            var contentDatabase = Client.ContentDatabase;
+                            var task = Task.Run(() => CreateItem(tag.label, contentDatabase));
                             task.Wait(1);
                             var item = task.Result;
                             tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
@@ -235,10 +236,9 @@ namespace TagControl
             return items;
         }
 
-        public Item CreateItem(string itemName)
+        public Item CreateItem(string itemName, Database contentDatabase)
         {
-            //First get the parent item from the master database
-            Database contentDatabase = Factory.GetDatabase("master");
+          
             Item parentItem = contentDatabase.GetItem(Source);
             //Now we need to get the template from which the item is created
             TemplateItem template = contentDatabase.GetTemplate(TagTemplateId);
