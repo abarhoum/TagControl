@@ -21,10 +21,10 @@
         (function ($) {
             $(function () {
                 // More code using $ as alias to jQuery
-                $("#myTags").tagit({
+                $("#myTags_($controlId$)").tagit({
                     autocomplete: { source: ($tags$), delay: 0, minLength: 2, showAutocompleteOnFocus: true,autoFocus: true }
                 });
-                $("#myTags").tagit({
+                $("#myTags_($controlId$)").tagit({
                     afterTagRemoved: function (event, ui) {
                         // do something special
                         selectedTags = JSON.parse($("#hdnJsonObject").val());
@@ -46,7 +46,7 @@
 </head>
 <body>
 
-    <ul id="myTags">
+    <ul id="myTags_($controlId$)">
         <!-- Existing list items will be pre-added to the tags -->
 		<!--<li data-id="1">Tag1</li>-->
         ($avalilableTags$)

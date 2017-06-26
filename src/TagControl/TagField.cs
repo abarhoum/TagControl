@@ -200,6 +200,7 @@ namespace TagControl
                 }
                 html = html.Replace("($avalilableTags$)", list.ToString());
                 html = html.Replace("($jsonObject$)", string.IsNullOrEmpty(tagEntitiesJson) ? "[]" : HttpUtility.HtmlEncode(tagEntitiesJson));
+                html = html.Replace("($controlId$)", this.InputId);
                 literalTags.Text = html;
                 
             }
