@@ -121,11 +121,12 @@ namespace TagControl
                  3) When you change the field and you go to other item without click save aciton, the dialog of "save itme changes" will appear 
                     and ask you if you want to save the changes, then you click "Yes"*/
                 var eventType = Sitecore.Context.ClientPage.ClientRequest.Parameters;
+                var tagEntities = new List<TagEntity>();
+                var jsonSerialiser = new JavaScriptSerializer();
+                var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form["hdnJsonObject"]);
                 if (eventType.Equals("contenteditor:save") || eventType.Equals("item:save()"))
                 {
-                    var tagEntities = new List<TagEntity>();
-                    var jsonSerialiser = new JavaScriptSerializer();
-                    var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form["hdnJsonObject"]);
+
                     var createItemTasks = new List<Task>();
                     foreach (var tag in tagList)
                     {
@@ -141,10 +142,12 @@ namespace TagControl
                             tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
                         }
                     }
-                    var value = jsonSerialiser.Serialize(tagList) ?? "";
-                    Sitecore.Context.ClientPage.Modified = (Value != value);
-                    if (value != null && value != Value)
-                        Value = value;
+                }
+                var value = jsonSerialiser.Serialize(tagList) ?? "";
+                Sitecore.Context.ClientPage.Modified = (Value != value);
+                if (value != null && value != Value)
+                {
+                    Value = value;
                 }
             }
             base.OnLoad(e);
@@ -193,22 +196,21 @@ namespace TagControl
                             }
                         }
                     }
-
                     tagEntitiesJson = jsonSerialiser.Serialize(tagEntities);
                 }
                 html = html.Replace("($avalilableTags$)", list.ToString());
                 html = html.Replace("($jsonObject$)", string.IsNullOrEmpty(tagEntitiesJson) ? "[]" : HttpUtility.HtmlEncode(tagEntitiesJson));
                 literalTags.Text = html;
+                
             }
             catch (Exception ex)
             {
                 Log.Error("TagField - BuildTagsControl method caused an unhandled exception", ex, this);
             }
         }
-
         private Item[] GetTags()
         {
-            Item[] tags=null;
+            Item[] tags = null;
             try
             {
                 tags = Client.ContentDatabase.SelectItems(Source);
