@@ -20,22 +20,24 @@
         jQuery.noConflict();
         (function ($) {
             $(function () {
+                var myTags = $("#myTags($inputid$)");
+                var hiddenJsonObject = $("#hdnJsonObject($inputid$)");
                 // More code using $ as alias to jQuery
-                $("#myTags_($controlId$)").tagit({
+                myTags.tagit({
                     autocomplete: { source: ($tags$), delay: 0, minLength: 2, showAutocompleteOnFocus: true,autoFocus: true }
                 });
-                $("#myTags_($controlId$)").tagit({
+                myTags.tagit({
                     afterTagRemoved: function (event, ui) {
                         // do something special
-                        selectedTags = JSON.parse($("#hdnJsonObject").val());
+                        selectedTags = JSON.parse(hiddenJsonObject.val());
                         removeByAttr(selectedTags, "label", ui.tagLabel);
-                        $("#hdnJsonObject").val(JSON.stringify(selectedTags));
+                        hiddenJsonObject.val(JSON.stringify(selectedTags));
                     },
                     afterTagAdded: function (event, ui) {
                         // tag not exist, add it to the selectedTags array
-                        selectedTags = JSON.parse($("#hdnJsonObject").val());
+                        selectedTags = JSON.parse(hiddenJsonObject.val());
                         addTagObject(selectedTags,ui.tag.data("id"), ui.tagLabel);
-                        $("#hdnJsonObject").val(JSON.stringify(selectedTags));
+                        hiddenJsonObject.val(JSON.stringify(selectedTags));
                     }
 
                 });
@@ -46,12 +48,12 @@
 </head>
 <body>
 
-    <ul id="myTags_($controlId$)">
+    <ul id="myTags($inputid$)">
         <!-- Existing list items will be pre-added to the tags -->
 		<!--<li data-id="1">Tag1</li>-->
         ($avalilableTags$)
     </ul>
     
-    <input type="hidden" id="hdnJsonObject" value="($jsonObject$)" />
+    <input type="hidden" id="hdnJsonObject($inputid$)" value="($jsonObject$)" />
 </body>
 </html>

@@ -123,7 +123,7 @@ namespace TagControl
                 var eventType = Sitecore.Context.ClientPage.ClientRequest.Parameters;
                 var tagEntities = new List<TagEntity>();
                 var jsonSerialiser = new JavaScriptSerializer();
-                var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form["hdnJsonObject"]);
+                var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)]);
                 if (eventType.Equals("contenteditor:save") || eventType.Equals("item:save()"))
                 {
 
@@ -200,9 +200,10 @@ namespace TagControl
                 }
                 html = html.Replace("($avalilableTags$)", list.ToString());
                 html = html.Replace("($jsonObject$)", string.IsNullOrEmpty(tagEntitiesJson) ? "[]" : HttpUtility.HtmlEncode(tagEntitiesJson));
-                html = html.Replace("($controlId$)", this.InputId);
+                html = html.Replace("($inputid$)", InputId);
+                //html = html.Replace("($controlId$)", this.InputId);
                 literalTags.Text = html;
-                
+
             }
             catch (Exception ex)
             {
