@@ -273,7 +273,14 @@ namespace TagControl
                 //Now we need to get the template from which the item is created
                 TemplateItem template = contentDatabase.GetTemplate(TagTemplateId);
                 //Now we can add the new item as a child to the parent
-                item = parentItem.Add(itemName, template);
+
+                var name =ItemUtil.ProposeValidItemName(itemName);
+                item = parentItem.Add(name, template);
+
+                item.Editing.BeginEdit();
+                item[TitleField] = itemName;
+                item.Editing.EndEdit();
+
             }
             catch (Exception ex)
             {
