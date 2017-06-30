@@ -190,8 +190,9 @@ namespace TagControl
                                 var item = Client.ContentDatabase.GetItem(parsedId);
                                 if (item != null)
                                 {
-                                    list.Append(string.Format("<li data-id='{0}'>{1}</li>", item.ID.ToString(), item[TitleField]));
-                                    tagEntities.Add(new TagEntity { id = item.ID.ToString(), label = item[TitleField] });
+                                    var title = !string.IsNullOrWhiteSpace(item[TitleField]) ? item[TitleField] : item.Name;
+                                    list.Append(string.Format("<li data-id='{0}'>{1}</li>", item.ID.ToString(), title));
+                                    tagEntities.Add(new TagEntity { id = item.ID.ToString(), label = title });
                                 }
                             }
                         }
@@ -248,7 +249,7 @@ namespace TagControl
                                 items.Add(new TagEntity
                                 {
                                     id = currentItem.ID.ToString(),
-                                    label = currentItem[TitleField]
+                                    label = !string.IsNullOrWhiteSpace(currentItem[TitleField]) ? currentItem[TitleField] : currentItem.Name
                                 });
                             }
 
