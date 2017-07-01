@@ -5,7 +5,7 @@ XP 8.1, XP 8.2 i did not test that on erilar version of Sitecore but it could wo
 
 <h2> Installation :</h2>
 
-Download the Sitecore Package : <b>TagsField20170701-1.0.zip<b>
+Download the Sitecore Package : <b>TagsField20170701-1.0.zip</b>
 Create new field from type "Tags", and in datasource provide the Folder Id for tags repository
 
 
