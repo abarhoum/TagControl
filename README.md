@@ -1,6 +1,5 @@
 # Tags Field
-Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag-it</a> jquery plugin , where it shows suggested tags from repository in sitecore as auto-complete, or you add new tags not available in the repository and it will be added when you save the item, 
-
+Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag-it</a> jquery plugin , where it shows suggested tags from repository in sitecore as auto-complete, or you add new tags not available in the repository and it will be added to the repository when you save the item.
 <h2> Sitecore versions :</h2>
 8.1, 8.2 i did not test that on erilar version of Sitecore but it could works.
 
