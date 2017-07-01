@@ -13,18 +13,18 @@ Create new field from type "Tags", and in datasource provide the Folder Id for t
 
 All Configurations will be in include/TagField/TagField.config
 
-<h4> TagField.TemplateId </h4>
+<h3> TagField.TemplateId </h3>
 
-Define the template Id for the tag Item :
+Define the template Id for the tag Item
 
 <setting name="TagField.TemplateId" value="{5AC7DEB1-15A5-46E1-B2E7-FC9C8DADEBFD}" />
 
-<h4> Title Field </h4>
+<h3> Title Field </h3>
 
 Define the title field for tag item
 <setting name="TagField.TitleField" value="Title" />
       
-<h4> HtmlTemplatePath </h4>
+<h3> HtmlTemplatePath </h3>
 by default the field html and assets will be installed in this location, no need to change this unless you need to move it to different folder
 <setting name="TagField.HTMLTemplatePath" value="sitecore\\shell\\Controls\\tag field\\template.html" />
 
