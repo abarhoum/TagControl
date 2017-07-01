@@ -1,11 +1,11 @@
 # Tags Field
 Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag-it</a> jquery plugin , where it shows suggested tags from repository in sitecore as auto-complete, or you add new tags not available in the repository and it will be added to the repository when you save the item.
 <h2> Sitecore versions :</h2>
-8.1, 8.2 i did not test that on erilar version of Sitecore but it could works.
+XP 8.1, XP 8.2 i did not test that on erilar version of Sitecore but it could works.
 
 <h2> Installation :</h2>
 
-Download the Sitecore Package : TagField20170630-1.0.zip
+Download the Sitecore Package : <b>TagsField20170701-1.0.zip<b>
 Create new field from type "Tags", and in datasource provide the Folder Id for tags repository
 
 
