@@ -1,7 +1,7 @@
 # Tags Field
 Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag-it</a> jquery plugin , where it shows suggested tags from repository in sitecore as auto-complete, or you add new tags not available in the repository and it will be added to the repository when you save the item.
 
-<h2>Youtube</h2>
+<h2>Video</h2>
 <a href="https://youtu.be/UYu_gJPA7Ds">Sitecore Tags Field</a>
 
 <h2> Sitecore versions :</h2>
