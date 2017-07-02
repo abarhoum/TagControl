@@ -28,7 +28,7 @@ Define the title field for tag item
 by default the field html and assets will be installed in this location, no need to change this unless you need to move it to different folder
 <setting name="TagField.HTMLTemplatePath" value="sitecore\\shell\\Controls\\tag field\\template.html" />
 
-<h2> uninstall : </h2>
+<h2> Uninstall : </h2>
 
 1) Remove TagControl.dll from bin folder.
 2) Remove \App_Config\Include\TagField folder.
