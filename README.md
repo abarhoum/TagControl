@@ -5,7 +5,7 @@ XP 8.1, XP 8.2 I did not test that on erlier versions but it should works.
 
 <h2> Installation :</h2>
 
-Download the Sitecore Package : <b>TagsField20170701-1.0.zip</b>
+Download the Sitecore Package : <b>TagsField20170702-1.0.zip</b>
 Create new field from type "Tags", and in datasource provide the Folder Id for tags repository
 
 
@@ -28,3 +28,7 @@ Define the title field for tag item
 by default the field html and assets will be installed in this location, no need to change this unless you need to move it to different folder
 <setting name="TagField.HTMLTemplatePath" value="sitecore\\shell\\Controls\\tag field\\template.html" />
 
+<h2> uninstall : </h2>
+
+1) Remove TagControl.dll from bin folder.
+2) Remove \App_Config\Include\TagField folder.
