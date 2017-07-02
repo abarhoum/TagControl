@@ -1,12 +1,15 @@
 # Tags Field
-Tag field is using  tag-it jquery plugin https://github.com/aehlke/tag-it, where it shows suggested tags from repository in sitecore as auto-complete, if you add new tags not available  or you can add new tag and when you save the item, it will save the new tag in tag repostiry.
+Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag-it</a> jquery plugin , where it shows suggested tags from repository in sitecore as auto-complete, or you add new tags not available in the repository and it will be added to the repository when you save the item.
+
+<h2>Video</h2>
+<a href="https://youtu.be/UYu_gJPA7Ds">Sitecore Tags Field</a>
 
 <h2> Sitecore versions :</h2>
-8.2
+SXP 8.1, SXP 8.2 I did not test that on erlier versions but it should works.
 
 <h2> Installation :</h2>
 
-Download the Sitecore Package : TagField20170630-1.0.zip
+Download the Sitecore Package : <b>TagsField20170702-1.0.zip</b>
 Create new field from type "Tags", and in datasource provide the Folder Id for tags repository
 
 
@@ -14,18 +17,22 @@ Create new field from type "Tags", and in datasource provide the Folder Id for t
 
 All Configurations will be in include/TagField/TagField.config
 
-<h2> TagField.TemplateId </h2>
+<h3> TagField.TemplateId </h3>
 
-Define the template Id for the tag Item :
+Define the template Id for the tag Item
 
 <setting name="TagField.TemplateId" value="{5AC7DEB1-15A5-46E1-B2E7-FC9C8DADEBFD}" />
 
-<h2> Title Field </h2>
+<h3> Title Field </h3>
 
 Define the title field for tag item
 <setting name="TagField.TitleField" value="Title" />
       
-<h2> HtmlTemplatePath </h2>
+<h3> HtmlTemplatePath </h3>
 by default the field html and assets will be installed in this location, no need to change this unless you need to move it to different folder
 <setting name="TagField.HTMLTemplatePath" value="sitecore\\shell\\Controls\\tag field\\template.html" />
 
+<h2> Uninstall : </h2>
+
+1) Remove TagControl.dll from bin folder.
+2) Remove \App_Config\Include\TagField folder.
