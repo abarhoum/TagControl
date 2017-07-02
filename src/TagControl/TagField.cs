@@ -126,7 +126,7 @@ namespace TagControl
                 if (Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)] != null)
                 {
                     var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)]);
-                    if (eventType.Equals("contenteditor:save") || eventType.Contains("item:save("))
+                    if (eventType.Equals("contenteditor:save") || eventType.Contains("item:save"))
                     {
 
                         var createItemTasks = new List<Task>();
