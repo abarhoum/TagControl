@@ -56,12 +56,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InjectTagsScript.cs" />
     <Compile Include="sitecore\TagEntity.cs" />
     <Compile Include="TagField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Config\Include\TagField\TagField.Pipelines.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App_Config\Include\TagField\TagField.config">
       <SubType>Designer</SubType>
     </None>
