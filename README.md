@@ -5,7 +5,7 @@ Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag
 <a href="https://youtu.be/UYu_gJPA7Ds">Sitecore Tags Field</a>
 
 <h2> Sitecore versions :</h2>
-XP 8.1, XP 8.2 I did not test that on erlier versions but it should works.
+SXP 8.1, SXP 8.2 I did not test that on erlier versions but it should works.
 
 <h2> Installation :</h2>
 
