@@ -123,31 +123,34 @@ namespace TagControl
                 var eventType = Sitecore.Context.ClientPage.ClientRequest.Parameters;
                 var tagEntities = new List<TagEntity>();
                 var jsonSerialiser = new JavaScriptSerializer();
-                var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)]);
-                if (eventType.Equals("contenteditor:save") || eventType.Equals("item:save()"))
+                if (Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)] != null)
                 {
-
-                    var createItemTasks = new List<Task>();
-                    foreach (var tag in tagList)
+                    var tagList = jsonSerialiser.Deserialize<List<TagEntity>>(Context.Request.Form[string.Format("hdnJsonObject{0}", InputId)]);
+                    if (eventType.Equals("contenteditor:save") || eventType.Contains("item:save("))
                     {
-                        if (tag.id == "0")
+
+                        var createItemTasks = new List<Task>();
+                        foreach (var tag in tagList)
                         {
-                            /* I created another task to create sitecore item, the reason behind that is when you create an item here in this place sitecore will take
-                            you to the newly created item in the tree which is this is the default behavior for sitecore, but for this control if new tag added not already
-                            exists in the tag repositroy, then i want to create that tage in the reop and get the newly tag item id, and save it in raw value of the field.*/
-                            var contentDatabase = Client.ContentDatabase;
-                            var task = Task.Run(() => CreateItem(tag.label, contentDatabase));
-                            task.Wait(1);
-                            var item = task.Result;
-                            tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
+                            if (tag.id == "0")
+                            {
+                                /* I created another task to create sitecore item, the reason behind that is when you create an item here in this place sitecore will take
+                                you to the newly created item in the tree which is this is the default behavior for sitecore, but for this control if new tag added not already
+                                exists in the tag repositroy, then i want to create that tage in the reop and get the newly tag item id, and save it in raw value of the field.*/
+                                var contentDatabase = Client.ContentDatabase;
+                                var task = Task.Run(() => CreateItem(tag.label, contentDatabase));
+                                task.Wait(1);
+                                var item = task.Result;
+                                tagList.First(p => p.label.Equals(tag.label)).id = item.ID.ToString();
+                            }
                         }
                     }
-                }
-                var value = jsonSerialiser.Serialize(tagList) ?? "";
-                Sitecore.Context.ClientPage.Modified = (Value != value);
-                if (value != null && value != Value)
-                {
-                    Value = value;
+                    var value = jsonSerialiser.Serialize(tagList) ?? "";
+                    Sitecore.Context.ClientPage.Modified = (Value != value);
+                    if (value != null && value != Value)
+                    {
+                        Value = value;
+                    }
                 }
             }
             base.OnLoad(e);
@@ -204,6 +207,7 @@ namespace TagControl
                 html = html.Replace("($inputid$)", InputId);
                 //html = html.Replace("($controlId$)", this.InputId);
                 literalTags.Text = html;
+
 
             }
             catch (Exception ex)
@@ -274,7 +278,7 @@ namespace TagControl
                 TemplateItem template = contentDatabase.GetTemplate(TagTemplateId);
                 //Now we can add the new item as a child to the parent
 
-                var name =ItemUtil.ProposeValidItemName(itemName);
+                var name = ItemUtil.ProposeValidItemName(itemName);
                 item = parentItem.Add(name, template);
 
                 item.Editing.BeginEdit();
