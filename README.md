@@ -4,6 +4,10 @@ Tag field is using <a target='blank' href="https://github.com/aehlke/tag-it">tag
 <h2>Video</h2>
 <a href="https://youtu.be/UYu_gJPA7Ds">Sitecore Tags Field</a>
 
+<h2>Raw values</h2>
+saving values as json object 
+[{"id":"{0F57B1D6-F390-4FC3-A262-79966F9A1061}","label":"Tag2"},{"id":"{36EAAEDF-B8CB-42C0-B0EB-289DD4812F70}","label":"Tag3"\]
+
 <h2> Sitecore versions :</h2>
 SXP 8.1, SXP 8.2 I did not test that on erlier versions but it should works.
 
